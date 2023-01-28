@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:native_context_menu/native_context_menu.dart' as ctx;
 import 'package:provider/provider.dart';
+import 'package:shorty_flutter/helper.dart';
 import 'package:shorty_flutter/state.dart';
-import 'package:shorty_flutter/widgets/groups/add_shortcut.dart';
-import 'package:shorty_flutter/widgets/groups/each_shortcut.dart';
+import 'package:shorty_flutter/widgets/shortcut/add_shortcut.dart';
+import 'package:shorty_flutter/widgets/shortcut/each_shortcut.dart';
 import 'add_group.dart';
 
 class EachGroup extends StatelessWidget {
@@ -37,27 +38,27 @@ class EachGroup extends StatelessWidget {
           });
     }
 
-    actionMoveUp() {
-      print("actionMoveUp");
+    actionMoveUp() async {
+      await appState.moveGroupUp(frontEndGroup.group.id);
     }
 
-    actionMoveDown() {
-      print("actionMoveDown");
+    actionMoveDown() async {
+      await appState.moveGroupDown(frontEndGroup.group.id);
     }
 
     actionDeleteGroup() {
       appState.deleteGroup(frontEndGroup.group);
     }
 
-    //var theme = Theme.of(context);
-    //var appState = context.watch<MyAppState>();
-    //var ooo = appState.allGroupsList;
     return Container(
-      margin: const EdgeInsets.all(15),
+      margin: const EdgeInsets.fromLTRB(50, 15, 50, 15),
       padding: const EdgeInsets.all(15),
-      color: Colors.black12,
-      //width: 600,
-      height: 220,
+      //color: Colors.black12,
+      decoration: BoxDecoration(
+        color: shortyBlack,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      height: 200,
       child: Column(
         children: [
           ctx.ContextMenuRegion(
@@ -71,6 +72,7 @@ class EachGroup extends StatelessWidget {
               ctx.MenuItem(title: 'Delete Group', onSelected: () => actionDeleteGroup()),
             ],
             child: Text(
+              style: const TextStyle(color: Colors.teal, fontSize: 15),
               "${frontEndGroup.group.title} (${frontEndGroup.group.id.toString()})",
             ),
           ),
