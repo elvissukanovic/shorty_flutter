@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shorty_flutter/widgets/groups/add_group.dart';
+import 'package:window_manager/window_manager.dart';
 import '../../state.dart';
-//import 'package:provider/provider.dart';
-//import '../../main.dart';
 
 class SearchContainer extends StatefulWidget {
   const SearchContainer({super.key});
@@ -12,38 +11,72 @@ class SearchContainer extends StatefulWidget {
   State<SearchContainer> createState() => _SearchContainerState();
 }
 
-class _SearchContainerState extends State<SearchContainer> {
+class _SearchContainerState extends State<SearchContainer> with WindowListener {
+  var focusNode = FocusNode();
+  final _controller = TextEditingController();
+  late MyAppState appState;
+
+  @override
+  void initState() {
+    windowManager.addListener(this);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    windowManager.removeListener(this);
+    super.dispose();
+  }
+
+  @override
+  void onWindowRestore() {
+    _controller.clear();
+    FocusScope.of(context).requestFocus(focusNode);
+    appState.filterGroups("");
+  }
+
   @override
   Widget build(BuildContext context) {
-    //var theme = Theme.of(context);
-    var appState = context.watch<MyAppState>();
-
+    appState = context.watch<MyAppState>();
     return Column(
-      //crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        TextField(
-          textAlign: TextAlign.center,
-          decoration: const InputDecoration(
-            contentPadding: EdgeInsets.all(12.0),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.black26),
+        Align(
+          alignment: Alignment.bottomRight,
+          child: Padding(
+            padding: const EdgeInsets.only(right: 50, top: 10),
+            child: TextButton(
+              onPressed: () => {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text("Add group"),
+                        content: AddGroupForm(),
+                      );
+                    }),
+              },
+              child: const Text(
+                "Add group",
+                style: TextStyle(color: Colors.teal),
+              ),
             ),
-            hintText: 'Search',
-            hintStyle: TextStyle(color: Color.fromARGB(255, 155, 146, 65)),
           ),
-          onChanged: (value) => {appState.filterGroups(value)},
         ),
-        FloatingActionButton(
-          onPressed: () => {
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text("Add group"),
-                    content: AddGroupForm(),
-                  );
-                }),
-          },
+        Padding(
+          padding: const EdgeInsets.fromLTRB(54, 15, 54, 15),
+          child: TextField(
+            controller: _controller,
+            focusNode: focusNode,
+            style: const TextStyle(color: Colors.teal, fontSize: 22),
+            textAlign: TextAlign.center,
+            onChanged: (value) => {appState.filterGroups(value)},
+            decoration: const InputDecoration(
+              hintText: "Search",
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.teal),
+              ),
+            ),
+          ),
         ),
       ],
     );

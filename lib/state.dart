@@ -6,7 +6,6 @@ import 'database/database.dart';
 class MyAppState extends ChangeNotifier {
   final database = MyAppDatabase();
   List<FrontEndGroup> allFrontEndGroupsList = [];
-  //List<Group> allGroupsList = [];
 
   MyAppState() {
     reloadAllGroups();
@@ -28,12 +27,14 @@ class MyAppState extends ChangeNotifier {
                     tmpGroup.shortcuts = allShortcuts.where((eachShortcut) => eachShortcut.groupId == group.id).toList(),
                     allFrontEndGroupsList.add(tmpGroup)
                   },
+                allFrontEndGroupsList.sort((x, y) => x.group.order > y.group.order ? 1 : 0),
                 notifyListeners()
               })
         });
   }
 
   filterGroups(String filter) {
+    print("je to");
     for (var eachGroup in allFrontEndGroupsList) {
       if (eachGroup.group.title.contains(filter)) {
         eachGroup.visible = true;
@@ -53,8 +54,13 @@ class MyAppState extends ChangeNotifier {
   }
 
   Future<void> createGroup(String title) async {
+    var max = 0;
+    for (var each in allFrontEndGroupsList) {
+      if (each.group.order >= max) max = each.group.order + 1;
+    }
     await database.into(database.groups).insert(GroupsCompanion(
         //title: Value(title), hide: const Value(false), order: const Value(0)));
+        order: Value(max),
         title: Value(title)));
     reloadAllGroups();
   }
@@ -66,6 +72,32 @@ class MyAppState extends ChangeNotifier {
 
   deleteGroup(Group group) async {
     await database.delete(database.groups).delete(group);
+    reloadAllGroups();
+  }
+
+  Future<void> moveGroupUp(int groupId) async {
+    await moveGroup(groupId, true);
+  }
+
+  Future<void> moveGroupDown(int groupId) async {
+    await moveGroup(groupId, false);
+  }
+
+  Future<void> moveGroup(int groupId, bool up) async {
+    var listToSort = allFrontEndGroupsList;
+    if (!up) listToSort.sort((x, y) => x.group.order > y.group.order ? 0 : 1);
+
+    Group previus = listToSort.first.group;
+    for (var each in allFrontEndGroupsList) {
+      if (each.group.id == groupId) {
+        var newOrderNumber = previus.order;
+        if (previus.order == each.group.order) newOrderNumber = up ? newOrderNumber++ : newOrderNumber--;
+        (database.update(database.groups)..where((x) => x.id.equals(each.group.id))).write(GroupsCompanion(order: Value(newOrderNumber)));
+        (database.update(database.groups)..where((x) => x.id.equals(previus.id))).write(GroupsCompanion(order: Value(each.group.order)));
+      } else {
+        previus = each.group;
+      }
+    }
     reloadAllGroups();
   }
 
@@ -116,36 +148,6 @@ class MyAppState extends ChangeNotifier {
   deleteShortcut(Shortcut shortcut) async {
     await database.delete(database.shortcuts).delete(shortcut);
   }
-
-  // var current = WordPair.random();
-  // var history = <WordPair>[];
-
-  // GlobalKey? historyListKey;
-
-  // void getNext() {
-  //   history.insert(0, current);
-  //   var animatedList = historyListKey?.currentState as AnimatedListState?;
-  //   animatedList?.insertItem(0);
-  //   current = WordPair.random();
-  //   notifyListeners();
-  // }
-
-  // var favorites = <WordPair>[];
-
-  // void toggleFavorite([WordPair? pair]) {
-  //   pair = pair ?? current;
-  //   if (favorites.contains(pair)) {
-  //     favorites.remove(pair);
-  //   } else {
-  //     favorites.add(pair);
-  //   }
-  //   notifyListeners();
-  // }
-
-  // void removeFavorite(WordPair pair) {
-  //   favorites.remove(pair);
-  //   notifyListeners();
-  // }
 }
 
 class FrontEndGroup {

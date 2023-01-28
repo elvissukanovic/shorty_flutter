@@ -15,13 +15,8 @@ class _GroupsContainerState extends State<GroupsContainer> {
   Widget build(BuildContext context) {
     //var theme = Theme.of(context);
     var appState = context.watch<MyAppState>();
-    //var ooo = appState.allGroupsList;
     return Expanded(
-      child: ListView(children: <Widget>[
-        for (var eachGroup
-            in appState.allFrontEndGroupsList.where((x) => x.visible))
-          EachGroup(frontEndGroup: eachGroup)
-      ]),
+      child: ListView(children: <Widget>[for (var eachGroup in appState.allFrontEndGroupsList.where((x) => x.visible)) EachGroup(frontEndGroup: eachGroup)]),
     );
   }
 }
