@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shorty_flutter/database/database.dart';
 import 'package:native_context_menu/native_context_menu.dart' as ctx;
-import 'package:shorty_flutter/helper.dart';
+import 'package:shorty_flutter/constants.dart';
 import 'package:shorty_flutter/widgets/shortcut/shortcut_image.dart';
 import 'dart:io';
 import 'package:window_manager/window_manager.dart';
@@ -25,6 +25,7 @@ class _EachShortcutState extends State<EachShortcut> {
     var ctrlPressed = RawKeyboard.instance.keysPressed.contains(LogicalKeyboardKey.controlLeft);
     Process.start('explorer', ['https:/www.google.com']);
     if (!ctrlPressed) await windowManager.minimize();
+
     //if (!ctrlPressed) await windowManager.close();
     /*
     switch (shortcut.type) {
@@ -59,6 +60,8 @@ class _EachShortcutState extends State<EachShortcut> {
       child: Tooltip(
         verticalOffset: 65,
         message: widget.shortcut.shortcut,
+        showDuration: const Duration(milliseconds: 0),
+        waitDuration: const Duration(milliseconds: 600),
         child: AnimatedContainer(
           width: 120,
           height: 120,

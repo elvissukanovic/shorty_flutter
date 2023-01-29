@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:native_context_menu/native_context_menu.dart' as ctx;
 import 'package:provider/provider.dart';
-import 'package:shorty_flutter/helper.dart';
+import 'package:shorty_flutter/constants.dart';
 import 'package:shorty_flutter/state.dart';
 import 'package:shorty_flutter/widgets/shortcut/add_shortcut.dart';
 import 'package:shorty_flutter/widgets/shortcut/each_shortcut.dart';
@@ -68,14 +68,14 @@ class EachGroup extends StatelessWidget {
     }
 
     return Container(
-      margin: const EdgeInsets.fromLTRB(50, 15, 50, 15),
-      padding: const EdgeInsets.all(15),
+      margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+      padding: const EdgeInsets.all(10),
       //color: Colors.black12,
       decoration: BoxDecoration(
         color: shortyBlack,
         borderRadius: shortyRadius,
       ),
-      height: 200,
+      height: 192,
       child: Column(
         children: [
           ctx.ContextMenuRegion(
@@ -89,8 +89,8 @@ class EachGroup extends StatelessWidget {
               ctx.MenuItem(title: 'Delete Group', onSelected: () => actionDeleteGroup()),
             ],
             child: Text(
-              style: TextStyle(color: shortyPrimary, fontSize: 15),
-              "${frontEndGroup.group.title} (${frontEndGroup.group.id.toString()})",
+              frontEndGroup.group.title,
+              style: TextStyle(color: shortyPrimary, fontSize: 16),
             ),
           ),
           Row(

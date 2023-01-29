@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shorty_flutter/constants.dart';
 import 'package:shorty_flutter/database/database.dart';
 
 class ShortcutImage extends StatelessWidget {
@@ -8,28 +9,14 @@ class ShortcutImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (shortcut.type == ShortcutType.file) {
-      return Image.asset(
-        'assets/images/lamp_icon.png',
-        height: 50,
-        width: 50,
-      );
-    }
+    return widgetImage(shortcut.type);
+  }
 
-    if (shortcut.type == ShortcutType.folder) {
-      return Image.asset(
-        'assets/images/folder_icon.png',
-        height: 50,
-        width: 50,
-      );
-    }
-
-    //if (shortcut.type == ShortcutType.web) {
+  Image widgetImage(ShortcutType type) {
     return Image.asset(
-      'assets/images/globe_icon.png',
+      shortcutImagePath(type),
       height: 50,
       width: 50,
     );
-    //}
   }
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shorty_flutter/widgets/groups/add_group.dart';
 import 'package:window_manager/window_manager.dart';
-import '../../helper.dart';
+import '../../constants.dart';
 import '../../state.dart';
 
 class SearchContainer extends StatefulWidget {
@@ -69,7 +69,7 @@ class _SearchContainerState extends State<SearchContainer> with WindowListener {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(54, 15, 54, 15),
+          padding: const EdgeInsets.symmetric(horizontal: 64, vertical: 15),
           child: TextField(
             controller: _controller,
             focusNode: focusNode,

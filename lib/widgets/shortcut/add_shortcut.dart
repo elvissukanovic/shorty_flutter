@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shorty_flutter/database/database.dart';
 
-import '../../helper.dart';
+import '../../constants.dart';
 import '../../state.dart';
 
 class AddShortcutForm extends StatelessWidget {
