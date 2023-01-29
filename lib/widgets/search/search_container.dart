@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shorty_flutter/widgets/groups/add_group.dart';
 import 'package:window_manager/window_manager.dart';
+import '../../helper.dart';
 import '../../state.dart';
 
 class SearchContainer extends StatefulWidget {
@@ -35,6 +36,18 @@ class _SearchContainerState extends State<SearchContainer> with WindowListener {
     appState.filterGroups("");
   }
 
+  actionAddGroup() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            backgroundColor: shortyDarkGray,
+            shape: RoundedRectangleBorder(borderRadius: shortyRadius),
+            child: AddGroupForm(),
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     appState = context.watch<MyAppState>();
@@ -46,18 +59,11 @@ class _SearchContainerState extends State<SearchContainer> with WindowListener {
             padding: const EdgeInsets.only(right: 50, top: 10),
             child: TextButton(
               onPressed: () => {
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text("Add group"),
-                        content: AddGroupForm(),
-                      );
-                    }),
+                actionAddGroup(),
               },
-              child: const Text(
+              child: Text(
                 "Add group",
-                style: TextStyle(color: Colors.teal),
+                style: TextStyle(color: shortyPrimary),
               ),
             ),
           ),
@@ -67,13 +73,13 @@ class _SearchContainerState extends State<SearchContainer> with WindowListener {
           child: TextField(
             controller: _controller,
             focusNode: focusNode,
-            style: const TextStyle(color: Colors.teal, fontSize: 22),
+            style: TextStyle(color: shortyPrimary, fontSize: 22),
             textAlign: TextAlign.center,
             onChanged: (value) => {appState.filterGroups(value)},
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               hintText: "Search",
               focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.teal),
+                borderSide: BorderSide(color: shortyPrimary),
               ),
             ),
           ),

@@ -57,7 +57,7 @@ class _EachShortcutState extends State<EachShortcut> {
         ctx.MenuItem(title: 'Delete Shortcut', onSelected: () => actionTest()),
       ],
       child: Tooltip(
-        verticalOffset: -90,
+        verticalOffset: 65,
         message: widget.shortcut.shortcut,
         child: AnimatedContainer(
           width: 120,
@@ -65,13 +65,12 @@ class _EachShortcutState extends State<EachShortcut> {
           margin: const EdgeInsets.all(15),
           duration: const Duration(milliseconds: 0),
           decoration: BoxDecoration(
-            color: Colors.teal,
-            //color: isHover ? Colors.black54 : Colors.black45,
-            borderRadius: BorderRadius.circular(12),
+            color: shortyPrimary,
+            borderRadius: shortyRadius,
             boxShadow: [
               if (isHover)
-                const BoxShadow(
-                  color: Colors.tealAccent,
+                BoxShadow(
+                  color: shortyPrimary,
                   blurRadius: 6,
                 ),
             ],

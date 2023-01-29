@@ -20,14 +20,30 @@ class EachGroup extends StatelessWidget {
       showDialog(
           context: context,
           builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text("Edit group"),
-              content: AddGroupForm(group: frontEndGroup.group),
+            return Dialog(
+              backgroundColor: shortyDarkGray,
+              shape: RoundedRectangleBorder(borderRadius: shortyRadius),
+              child: AddGroupForm(group: frontEndGroup.group),
             );
           });
     }
 
     actionAddShortcut() {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Dialog(
+              backgroundColor: shortyDarkGray,
+              shape: RoundedRectangleBorder(borderRadius: shortyRadius),
+              //title: const Text("Add Shortcut"),
+              child: AddShortcutForm(groupId: frontEndGroup.group.id),
+            );
+          });
+    }
+
+    /*
+    // white default dialog
+    actionAddShortcut2() {
       showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -37,6 +53,7 @@ class EachGroup extends StatelessWidget {
             );
           });
     }
+    */
 
     actionMoveUp() async {
       await appState.moveGroupUp(frontEndGroup.group.id);
@@ -56,7 +73,7 @@ class EachGroup extends StatelessWidget {
       //color: Colors.black12,
       decoration: BoxDecoration(
         color: shortyBlack,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: shortyRadius,
       ),
       height: 200,
       child: Column(
@@ -72,7 +89,7 @@ class EachGroup extends StatelessWidget {
               ctx.MenuItem(title: 'Delete Group', onSelected: () => actionDeleteGroup()),
             ],
             child: Text(
-              style: const TextStyle(color: Colors.teal, fontSize: 15),
+              style: TextStyle(color: shortyPrimary, fontSize: 15),
               "${frontEndGroup.group.title} (${frontEndGroup.group.id.toString()})",
             ),
           ),
